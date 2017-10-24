@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.neusoft.emr.modules.basic.dao.OfficeDao">
+
+    <sql id="officeColumns">
+        a.guid as "guid",
+        a.ksmc as "ksmc ",
+        a.ksbh as "ksbh",
+        a.ksywm as "ksywm",
+        a.ssjg as "ssjg.guid",
+        a.ksfzr as "ksfzr",
+        a.pyszm as "pyszm",
+        a.cjr as "cjr.guid",
+        a.zhxgr as "zhxgr.guid",
+        a.cjsj as "cjsj",
+        a.zhxgsj as "zhxgsj",
+        a.scbzw as "scbzw"
+    </sql>
+
+    <!--用于查询用户医生角色的科室权限关联-->
+    <sql id="userRoleDataScopeJoins">
+      LEFT JOIN public.emr_permission_gl_jsyg_ks as b ON b.ks= a.guid
+      LEFT JOIN public.emr_permission_gl_yg_js as c ON c.guid = b.jsygid
+    </sql>
+
+
+    <!--用于查询用户医生角色的科室权限-->
+    <select id="getOfficesByUser" resultType="com.neusoft.emr.modules.basic.entity.Office">
+        select <include refid="officeColumns"/>
+        from emr_basic_ksxx as a <include refid="userRoleDataScopeJoins"/>
+        where c.yg = #{userId} and c.js = #{roleId}
+
+    </select>
+</mapper>

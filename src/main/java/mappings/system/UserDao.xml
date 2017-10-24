@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.emr.modules.system.dao.UserDao">
+
+    <sql id="userColumns">
+        a.guid as "guid",
+        a.dlm as "dlm",
+        a.dlmm as "dlmm",
+        a.yxdz as "yxdz",
+        a.cjr as "cjr.guid",
+        a.zhxgr as "zhxgr.guid",
+        a.cjsj as "cjsj",
+        a.zhxgsj as "zhxgsj",
+        a.scbzw as "scbzw"
+    </sql>
+
+    <sql id="userInfoColumns">
+        a.guid as "guid",
+        a.ygbh as "ygbh",
+        a.gh as "gh",
+        a.ssjg as "ssjg.guid",
+        a.ssks as "ssks.guid",
+        a.ssbq as "ssbq.guid",
+        a.zc as "zc.guid",
+        a.yglx as "yglx",
+        a.xm as "xm",
+        a.xb as "xb",
+        a.sfzhm as "sfzhm",
+        a.lxdh as "lxdh",
+        a.cjr as "cjr.guid",
+        a.zhxgr as "zhxgr.guid",
+        a.cjsj as "cjsj",
+        a.zhxgsj as "zhxgsj",
+        a.scbzw as "scbzw"
+    </sql>
+
+
+    <select id="get"  resultType="com.neusoft.emr.modules.system.entity.User">
+        select
+          <include refid="userColumns"/>
+        from  public.emr_system_ygdlxx as a
+        <where>
+            a.scbzw = #{DEL_FLAG_NORMAL}
+            <if test="guid!=null and guid!=''">
+                and a.guid = #{guid}
+            </if>
+            <if test="dlm!=null and dlm!=''">
+                and a.dlm = #{dlm}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="getUserView" resultType="com.neusoft.emr.modules.basic.entity.UserInfo">
+        SELECT <include refid="userInfoColumns"/>
+        from public.emr_basic_ygjbxx as a
+        where a.guid = #{guid}
+    </select>
+
+
+    <insert id="upsert">
+        insert into public.emr_system_ygdlxx
+        (guid,dlm,dlmm,yxdz,cjr,zhxgr,cjsj,zhxgsj,scbzw)
+        VALUES (
+          #{guid},
+          #{dlm},
+          #{dlmm},
+          #{yxdz},
+          #{cjr.guid},
+          #{zhxgr.guid},
+          #{cjsj},
+          #{zhxgsj},
+          #{scbzw}
+        )ON CONFLICT (guid) DO UPDATE SET
+        dlm = EXCLUDED.dlm,
+        dlmm = EXCLUDED.dlmm,
+        yxdz = EXCLUDED.yxdz,
+        cjr = EXCLUDED.cjr,
+        zhxgr = EXCLUDED.zhxgr,
+        cjsj = EXCLUDED.cjsj,
+        zhxgsj = EXCLUDED.zhxgsj,
+        scbzw = EXCLUDED.scbzw
+    </insert>
+</mapper>

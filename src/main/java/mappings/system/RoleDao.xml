@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.neusoft.emr.modules.system.dao.RoleDao">
+
+    <sql id="roleColumns">
+        a.guid as "guid",
+        a.jsm as "jsm",
+        a.jslb as "jslb",
+        a.jsdh as "jsdh",
+        a.ssjg as "ssjg.guid",
+        a.pyszm as "pyszm",
+        a.cjr as "cjr.guid",
+        a.zhxgr as "zhxgr.guid",
+        a.cjsj as "cjsj",
+        a.zhxgsj as "zhxgsj",
+        a.scbzw as "scbzw"
+    </sql>
+
+    <sql id="roleViewColumns">
+        a.guid as "guid",
+        a.iconcls as "iconCls",
+        a.jsm as "jsm",
+        a.jslb as "jslb",
+        a.jsdh as "jsdh",
+        b.guid as "ks_guid",
+        b.ksmc as "ksmc",
+        b.ksbh as "ksbh",
+        b.ksywm as "ksywm",
+        a.jsm||COALESCE('('||b.ksmc||')','') as "jsksmc",
+        d.yg as "belongUser_guid",
+        c.mrbjw as "mrbjw",
+        c.guid as "glGuid"
+    </sql>
+
+    <sql id="roleJoins">
+        LEFT JOIN public.emr_permission_gl_yg_js as b ON b.js= a.guid
+        LEFT JOIN public.emr_system_ygdlxx as c ON c.guid = b.yg
+    </sql>
+
+    <sql id="roleViewJoins">
+        LEFT JOIN public.emr_permission_gl_yg_js as d ON d.js = a.guid
+        LEFT JOIN public.emr_permission_gl_jsyg_ks as c ON c.jsygid = d.guid
+        LEFT JOIN public.emr_basic_ksxx as b ON b.guid = c.ks
+    </sql>
+
+    <select id="findRolesByUserId" parameterType="java.lang.String" resultType="com.neusoft.emr.modules.system.entity.Role">
+      SELECT <include refid="roleColumns"/>
+        from public.emr_permission_js as a <include refid="roleJoins"/>
+        where c.guid = #{guid} and a.scbzw = 'N' order by a.cjsj
+    </select>
+
+
+    <select id="getViewList" resultType="com.neusoft.emr.modules.system.viewEntity.RoleQueryVo" parameterType="com.neusoft.emr.modules.system.viewEntity.RoleQueryVo">
+      SELECT  <include refid="roleViewColumns"/>
+        from public.emr_permission_js as a <include refid="roleViewJoins"/>
+        where d.yg = #{belongUser_guid} and a.scbzw = 'N'
+    </select>
+
+    <select id="getRoleView" resultType="com.neusoft.emr.modules.system.viewEntity.RoleQueryVo">
+        SELECT <include refid="roleViewColumns"/>
+        from public.emr_permission_js as a <include refid="roleViewJoins"/>
+        where c.guid = #{glGuid} and a.scbzw = 'N'
+    </select>
+</mapper>

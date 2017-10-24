@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.neusoft.emr.modules.system.dao.MenuDao">
+
+    <sql id="userInfoColumns">
+        a.guid as "guid",
+        a.ygbh as "ygbh",
+        a.gh as "gh",
+        a.ssjg as "ssjg.guid",
+        a.ssks as "ssks.guid",
+        a.ssbq as "ssbq.guid",
+        a.zc as "zc.guid",
+        a.yglx as "yglx",
+        a.xm as "xm",
+        a.xb as "xb",
+        a.sfzhm as "sfzhm",
+        a.lxdh as "lxdh",
+        a.cjr as "cjr.guid",
+        a.zhxgr as "zhxgr.guid",
+        a.cjsj as "cjsj",
+        a.zhxgsj as "zhxgsj",
+        a.scbzw as "scbzw"
+    </sql>
+
+
+
+
+</mapper>
